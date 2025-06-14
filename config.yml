@@ -1,0 +1,52 @@
+# Configuration for the SnipsClipsHate Analysis Pipeline
+
+# 1. Paths
+# Define all input, output, and temporary paths used by the pipeline.
+paths:
+  # Source data
+  raw_data_csv: "data/raw/posts.csv"
+  media_directory: "data/raw/media/"
+
+  # Processed data
+  processed_data: "data/processed/"
+  step1_output: "data/processed/step1_output.csv"
+  step2_output: "data/processed/step2_output.csv"
+  step3_output: "data/processed/step3_output.csv"
+  step4_output: "data/processed/step4_output.json"
+  step5_output: "data/processed/step5_output.csv"
+
+  # Log files
+  log_dir: "logs/"
+
+  # Dashboard output
+  dashboard_dir: "dashboard_output/"
+
+
+# 2. Pipeline Settings
+pipeline:
+  # Name of the model to use for analysis (must match a key in the 'models' section)
+  model_to_use: "gemma" 
+
+
+# 3. Model Configurations
+# Define settings for each model, especially for API-based models like LM Studio.
+models:
+  gemma:
+    # We will use LM Studio, which runs as a local server.
+    # The 'handler' will be a simple API client.
+    api_base_url: "http://127.0.0.1:1234/v1"
+    model_name: "lmstudio-community/gemma-2b-it-GGUF" # Example model name in LM Studio
+    prompt_template: "prompts/gemma_prompt.txt"
+
+  phi3:
+    api_base_url: "http://127.0.0.1:1234/v1"
+    model_name: "microsoft/Phi-3-mini-4k-instruct-gguf" # Example model name in LM Studio
+    prompt_template: "prompts/phi3_prompt.txt"
+
+
+# 4. Logging Configuration
+logging:
+  log_file: "logs/pipeline.log"
+  level: "INFO" # Can be DEBUG, INFO, WARNING, ERROR, CRITICAL
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  datefmt: "%Y-%m-%d %H:%M:%S"
