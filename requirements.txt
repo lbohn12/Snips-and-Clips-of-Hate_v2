@@ -1,20 +1,22 @@
-torch==2.1.0
-torchvision==0.16.0
-transformers==4.43.0
+# Core ML dependencies - Simplified for LM Studio Integration
+# PyTorch for CPU is still required by openai-whisper
+torch
+torchvision
+transformers
 pandas>=2.0.0
-Pillow==10.1.0
+Pillow>=10.1.0
 numpy>=1.24.0
 tqdm>=4.65.0
-accelerate==0.28.0
-bitsandbytes==0.41.3
-safetensors>=0.4.0
-decord>=0.6.0
-outlines>=0.0.34
+accelerate
+bitsandbytes
+safetensors
+decord
+outlines
 pydantic>=2.0.0
 
 # Audio processing and visualization libraries
-librosa>=0.10.0
-moviepy>=1.0.3
-matplotlib>=3.7.0
-openai-whisper>=20231117
-psutil>=5.9.0
+librosa
+moviepy
+matplotlib
+openai-whisper
+psutil
