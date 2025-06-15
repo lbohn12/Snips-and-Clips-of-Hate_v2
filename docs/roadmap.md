@@ -21,56 +21,70 @@ This roadmap outlines the phased approach to consolidate the project and move fo
     *   Create a `develop` branch from `main`.
     *   Protect the `main` branch in GitHub settings, requiring pull requests for all merges.
 
----
-
-### Phase 2: Migrate and Finalize V1 (Gemma Pipeline)
-
-**Goal:** Get the best version of the V1 pipeline running and visualize its results.
-
-1.  **Migrate Core Pipeline:**
-    *   Create a new branch: `feature/migrate-gemma-pipeline`.
-    *   Copy the refactored pipeline scripts from `Snips/scripts/core/refactored/` into the new project's `src/` directory.
-    *   Copy the best-performing model configuration (for Gemma-3/4B).
-    *   Update scripts to use a centralized configuration file instead of hardcoded paths.
-
-2.  **Migrate Dashboard & Visualization:**
-    *   Copy the dashboard generator scripts from `Snips/scripts/visualization/` into `src/visualization/`.
-    *   Ensure the dashboard can correctly process the output from the Gemma pipeline.
-
-3.  **Run and Validate:**
-    *   Run the full Gemma pipeline on the 1500 posts.
-    *   Generate the final dashboard.
-    *   Commit the generated dashboard (as a static HTML file) and key charts to a new `results/v1_gemma/` directory.
-
-4.  **Merge and Tag:**
-    *   Merge `feature/migrate-gemma-pipeline` into `develop`.
-    *   Merge `develop` into `main`.
-    *   Create a git tag `v1.0.0` to mark the official completion of V1.
+4.  **Create Workspace Configuration:**
+    *   Create a `.code-workspace` file to define project settings and ensure consistent linter/tooling behavior.
 
 ---
 
-### Phase 3: Develop V2 (HCA Integration)
+### Phase 2: Migrate V1 Gemma Pipeline
 
-**Goal:** Integrate the new Hierarchical Cluster Analysis based on the new codebook.
+**Goal:** Get the existing V1 Gemma pipeline running in the new, clean repository structure.
 
-1.  **Create V2 Feature Branch:**
-    *   Create a new branch from `develop`: `feature/step6-hca-analysis`.
+1.  **Establish Core Structure & Runner:**
+    *   Create the new `src`, `data`, `docs`, and `notebooks` directory structure.
+    *   Create a new main entry point (`run.py`) that is configuration-driven.
+    *   Create a central `config.yml` to manage all paths, models, and settings.
+    *   Refactor `logging_setup.py` to be config-driven.
+    *   Create placeholder functions for all 5 pipeline steps.
+    *   Verify the new runner works end-to-end with placeholder steps.
 
-2.  **Develop Step 6 Module:**
-    *   Create a new module `src/pipeline/step6_hca.py`.
-    *   Implement the HCA logic.
-    *   Define the inputs (likely the CSV output from a previous step) and outputs (cluster data, visualizations).
+2.  **Implement Step 1 (Data Ingestion):**
+    *   Create `identity.py` and `data_structures.py` utilities in the new `src` directory.
+    *   Implement `execute_step1` to load raw data, scan media, generate `tweet_id`s, and merge into a single dataset.
+    *   Test Step 1 independently to ensure it produces the correct combined dataset.
 
-3.  **Integrate into Pipeline Runner:**
-    *   Update the main pipeline runner to include `step6` as an executable step.
-    *   Update configuration to manage settings for Step 6.
+3.  **Implement Step 2 (Preprocessing):**
+    *   Refactor the preprocessing logic from the old scripts into `execute_step2`.
+    *   Ensure all file paths are read from `config.yml`.
+    *   Test Step 2 independently.
 
-4.  **Update Dashboard for V2:**
-    *   Create a new dashboard or add a new section to the existing one to visualize the HCA results.
+4.  **Implement Step 3 (Transcription):**
+    *   Refactor the `openai-whisper` logic into `execute_step3`.
+    *   This step should be config-driven, allowing for model size selection.
+    *   Test Step 3 independently.
 
-5.  **Merge and Tag:**
-    *   When complete, merge `feature/step6-hca-analysis` into `develop`.
-    *   This will eventually become `v2.0.0`.
+5.  **Implement Step 4 (VLM Analysis):**
+    *   Create a simple API client in `src/modeling/lm_studio_client.py`.
+    *   Implement `execute_step4` to send data to the LM Studio API endpoint defined in `config.yml`.
+    *   This will involve reading a prompt template and formatting the data for the API call.
+    *   Test Step 4 independently.
+
+6.  **Implement Step 5 (Analysis & Dashboard):**
+    *   Refactor the analysis logic (comparison metrics) into `execute_step5`.
+    *   Refactor the dashboard generation logic into `src/visualization/`.
+    *   The runner will call the dashboard generation after the pipeline completes.
+    *   Test Step 5 and the dashboard generation.
+
+---
+
+### Phase 3: V2 - HCA Integration & New Features
+
+**Goal:** Integrate the new "Step 6 HCA" codebook and expand project capabilities.
+
+1.  **Develop Step 6 (HCA):**
+    *   Create a new `execute_step6` function.
+    *   Implement the logic for the Human Coding Assignment based on the new codebook.
+    *   Update `config.yml` with any new paths or settings required for Step 6.
+
+2.  **Refine and Validate:**
+    *   Run the full v2 pipeline (Steps 1-6).
+    *   Validate the results and compare them against the v1 outputs.
+    *   Update the dashboard to include visualizations for the new HCA data.
+
+3.  **Final Documentation & Cleanup:**
+    *   Update the main `README.md` with final instructions for running the v2 pipeline.
+    *   Clean up any remaining old files or artifacts.
+    *   Archive the old repositories (`Snips` and `SnipsClipsHate`).
 
 ---
 

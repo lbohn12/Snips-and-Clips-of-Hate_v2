@@ -1,0 +1,16 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"python.analysis.extraPaths": [
+			"./src"
+		],
+		"python.autoComplete.extraPaths": [
+			"./src"
+		],
+		"terminal.integrated.cwd": "${workspaceFolder}"
+	}
+} 
